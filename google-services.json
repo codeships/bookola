@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "63515447199",
+    "project_id": "bookola-f940b",
+    "storage_bucket": "bookola-f940b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63515447199:android:812af01584c5dca7bdf7aa",
+        "android_client_info": {
+          "package_name": "com.codeships.bookola"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkwFCth108mtNGDo9epM3Ak5hOTCdw394"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

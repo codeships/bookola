@@ -1,16 +1,50 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import React from 'react';
-import { useColorScheme } from 'react-native';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { useEffect } from 'react';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { AuthProvider, useAuth } from '@/lib/auth/auth-context';
+import { BooksProvider } from '@/lib/books/books-provider';
+import { AppSettingsProvider } from '@/lib/settings/app-settings';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+function RootNavigator() {
+  const { session, initializing } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (initializing) return;
+
+    const group = segments[0];
+    const inAuthFlow = group === '(auth)' || group === undefined; // (auth) screens + onboarding (index)
+
+    if (session && inAuthFlow) {
+      router.replace('/(tabs)/home');
+    } else if (!session && !inAuthFlow) {
+      router.replace('/(auth)/login');
+    }
+  }, [session, initializing, segments, router]);
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="book/[id]" options={{ animation: 'slide_from_right' }} />
+      <Stack.Screen name="reader/[id]" options={{ animation: 'fade' }} />
+      <Stack.Screen name="player/[id]" options={{ animation: 'slide_from_bottom' }} />
+      <Stack.Screen name="settings/index" options={{ animation: 'slide_from_right' }} />
+      <Stack.Screen name="subscription/index" options={{ animation: 'slide_from_right' }} />
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AppSettingsProvider>
+      <AuthProvider>
+        <BooksProvider>
+          <RootNavigator />
+        </BooksProvider>
+      </AuthProvider>
+    </AppSettingsProvider>
   );
 }
