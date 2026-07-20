@@ -3,4 +3,4 @@
 // the web bundler can't resolve).
 
 /** Synchronous key/value store used for the Supabase session + app settings. */
-export const storage: Storage = localStorage;
+export const supabaseStorage: Storage = localStorage;

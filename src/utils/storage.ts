@@ -4,4 +4,5 @@
 import 'expo-sqlite/localStorage/install';
 
 /** Synchronous key/value store used for the Supabase session + app settings. */
-export const storage: Storage = localStorage;
+export const supabaseStorage: Storage = localStorage;
+
