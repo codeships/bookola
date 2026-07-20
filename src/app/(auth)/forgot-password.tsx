@@ -44,7 +44,7 @@ export default function ForgotPasswordScreen() {
         <Text style={[styles.brand, { color: colors.primary }]}>BOOKOLA</Text>
         <Text style={[styles.title, { color: colors.text }]}>Reset your password</Text>
         <Text style={[styles.subtitle, { color: colors.mutedText }]}>
-          Enter your email and we'll send you a link to get back into your reading space.
+          Enter your email and we’ll send you a link to get back into your reading space.
         </Text>
       </AnimatedFadeIn>
 
@@ -88,7 +88,7 @@ export default function ForgotPasswordScreen() {
             />
             <Pressable onPress={() => setSent(false)}>
               <Text style={[styles.resend, { color: colors.primary }]}>
-                Didn't receive it? Send again
+                Didn’t receive it? Send again
               </Text>
             </Pressable>
           </GlassPanel>

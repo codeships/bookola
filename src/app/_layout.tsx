@@ -13,12 +13,13 @@ function RootNavigator() {
   useEffect(() => {
     if (initializing) return;
 
-    const group = segments[0];
+    const group = segments[0] as string | undefined;
+    const isPasswordRecovery = group === 'reset-password';
     const inAuthFlow = group === '(auth)' || group === undefined; // (auth) screens + onboarding (index)
 
-    if (session && inAuthFlow) {
+    if (session && inAuthFlow && !isPasswordRecovery) {
       router.replace('/(tabs)/home');
-    } else if (!session && !inAuthFlow) {
+    } else if (!session && !inAuthFlow && !isPasswordRecovery) {
       router.replace('/(auth)/login');
     }
   }, [session, initializing, segments, router]);
@@ -34,6 +35,7 @@ function RootNavigator() {
       <Stack.Screen name="settings/index" options={{ animation: 'slide_from_right' }} />
       <Stack.Screen name="subscription/index" options={{ animation: 'slide_from_right' }} />
       <Stack.Screen name="upload/index" options={{ animation: 'slide_from_bottom' }} />
+      <Stack.Screen name="reset-password" options={{ animation: 'fade' }} />
     </Stack>
   );
 }

@@ -29,12 +29,14 @@ type AuthContextValue = {
   ) => Promise<AuthResult>;
   signInWithGoogle: () => Promise<AuthResult>;
   resetPassword: (email: string) => Promise<AuthResult>;
+  updatePassword: (password: string) => Promise<AuthResult>;
   signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const redirectTo = Linking.createURL('/(auth)/login');
+const passwordResetRedirectTo = Linking.createURL('/reset-password');
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -135,8 +137,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       async resetPassword(email) {
         const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo,
+          redirectTo: passwordResetRedirectTo,
         });
+        return { error: error?.message ?? null };
+      },
+
+      async updatePassword(password) {
+        const { error } = await supabase.auth.updateUser({ password });
         return { error: error?.message ?? null };
       },
 
