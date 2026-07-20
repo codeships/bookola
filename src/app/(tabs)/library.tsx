@@ -26,13 +26,24 @@ export default function LibraryScreen() {
     downloaded: downloadedBooks,
   } = useLibrary();
   const { highlights } = useHighlights();
+  const uploadedBooks = items.filter((book) => book.source === 'upload');
 
   return (
     <ScreenShell>
-      <Text style={[styles.title, { color: colors.text }]}>Your Library</Text>
-      <Text style={[styles.subtitle, { color: colors.mutedText }]}>
-        Your books, highlights, and downloads in one calm space.
-      </Text>
+      <View style={styles.titleRow}>
+        <View style={styles.titleCopy}>
+          <Text style={[styles.title, { color: colors.text }]}>Your Library</Text>
+          <Text style={[styles.subtitle, { color: colors.mutedText }]}>A quiet place for everything you read.</Text>
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Upload a book"
+          onPress={() => router.push('/upload' as never)}
+          style={[styles.uploadButton, { backgroundColor: colors.text }]}>
+          <Text style={styles.uploadIcon}>＋</Text>
+          <Text style={styles.uploadText}>Upload</Text>
+        </Pressable>
+      </View>
 
       {/* Tabs */}
       <View style={styles.tabs}>
@@ -58,6 +69,12 @@ export default function LibraryScreen() {
       {activeTab === 'reading' && (
         <>
           <SectionHeader title="In Progress" />
+          {inProgressBooks.length === 0 && (
+            <GlassPanel style={styles.emptyCard}>
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>Your next read starts here</Text>
+              <Text style={[styles.emptyText, { color: colors.mutedText }]}>Upload a book or open one from the catalog to begin.</Text>
+            </GlassPanel>
+          )}
           {inProgressBooks.map((book) => (
             <Pressable key={book.id} onPress={() => router.push(`/reader/${book.id}`)}>
               <GlassPanel style={styles.bookRow}>
@@ -77,6 +94,26 @@ export default function LibraryScreen() {
               </GlassPanel>
             </Pressable>
           ))}
+
+          {uploadedBooks.length > 0 && (
+            <>
+              <SectionHeader title="Your Uploads" />
+              {uploadedBooks.map((book) => (
+                <Pressable key={book.id} onPress={() => router.push(`/book/${book.id}`)}>
+                  <GlassPanel style={styles.bookRow}>
+                    <View style={[styles.bookCover, { backgroundColor: book.accent }]}>
+                      <Image source={book.cover} style={styles.bookImage} resizeMode="cover" />
+                    </View>
+                    <View style={styles.bookInfo}>
+                      <Text numberOfLines={1} style={[styles.bookTitle, { color: colors.text }]}>{book.title}</Text>
+                      <Text style={[styles.bookAuthor, { color: colors.mutedText }]}>{book.author}</Text>
+                      <Text style={[styles.metaText, { color: colors.primary }]}>Uploaded edition</Text>
+                    </View>
+                  </GlassPanel>
+                </Pressable>
+              ))}
+            </>
+          )}
 
           {/* Reading goal */}
           <GlassPanel style={styles.goalCard}>
@@ -174,7 +211,7 @@ export default function LibraryScreen() {
               <GlassPanel key={h.id} style={styles.highlightCard}>
                 <View style={[styles.highlightBar, { backgroundColor: h.color }]} />
                 <View style={styles.highlightContent}>
-                  <Text style={[styles.highlightQuote, { color: colors.text }]}>"{h.text}"</Text>
+                  <Text style={[styles.highlightQuote, { color: colors.text }]}>“{h.text}”</Text>
                   {h.note && (
                     <Text style={[styles.highlightNote, { color: colors.mutedText }]}>
                       📝 {h.note}
@@ -197,13 +234,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '800',
-    marginBottom: 8,
+    letterSpacing: -0.6,
   },
+  titleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 16, marginBottom: 22 },
+  titleCopy: { flex: 1 },
   subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 18,
+    fontSize: 14,
+    lineHeight: 21,
+    marginTop: 6,
   },
+  uploadButton: { minHeight: 44, borderRadius: 14, paddingHorizontal: 15, flexDirection: 'row', alignItems: 'center', gap: 6 },
+  uploadIcon: { color: '#FFFFFF', fontSize: 18, lineHeight: 20 },
+  uploadText: { color: '#FFFFFF', fontSize: 13, fontWeight: '700' },
   tabs: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -281,6 +323,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
   },
+  emptyTitle: { fontSize: 17, fontWeight: '700', marginBottom: 6 },
   storageCard: {
     padding: 18,
     marginBottom: 14,

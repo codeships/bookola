@@ -33,6 +33,7 @@ function RootNavigator() {
       <Stack.Screen name="player/[id]" options={{ animation: 'slide_from_bottom' }} />
       <Stack.Screen name="settings/index" options={{ animation: 'slide_from_right' }} />
       <Stack.Screen name="subscription/index" options={{ animation: 'slide_from_right' }} />
+      <Stack.Screen name="upload/index" options={{ animation: 'slide_from_bottom' }} />
     </Stack>
   );
 }

@@ -20,6 +20,7 @@ export type BookRow = {
   source: string | null;
   read_url: string | null;
   download_url: string | null;
+  uploaded_by?: string | null;
 };
 
 /** Extract a remote cover URL from a Book.cover ({ uri } for external books). */

@@ -16,7 +16,7 @@ export function BookCard({ book, onPress }: BookCardProps) {
     <Pressable onPress={onPress} style={styles.container}>
       <GlassPanel style={styles.panel}>
         <View style={[styles.coverWrap, { backgroundColor: book.accent }]}>
-          <Image source={book.cover} style={styles.cover} resizeMode="contain" />
+          <Image source={book.cover} style={styles.cover} resizeMode="cover" />
         </View>
         <View style={styles.content}>
           <Text numberOfLines={1} style={[styles.title, { color: colors.text }]}>
@@ -41,18 +41,19 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   panel: {
-    padding: 12,
+    padding: 10,
   },
   coverWrap: {
-    height: 170,
-    borderRadius: 22,
+    height: 210,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
   },
   cover: {
-    width: 110,
-    height: 110,
+    width: 128,
+    height: 184,
+    borderRadius: 6,
   },
   content: {
     gap: 6,

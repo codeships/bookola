@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Linking,
   Pressable,
   StyleSheet,
   Text,
@@ -122,7 +123,7 @@ export default function BookDetailsScreen() {
       <AnimatedFadeIn delay={100}>
       <GlassPanel style={styles.heroCard}>
         <View style={[styles.coverArea, { backgroundColor: book.accent }]}>
-          <Image source={book.cover} style={styles.cover} resizeMode="contain" />
+          <Image source={book.cover} style={styles.cover} resizeMode="cover" />
         </View>
         <Text style={[styles.title, { color: colors.text }]}>{book.title}</Text>
         <Text style={[styles.author, { color: colors.mutedText }]}>by {book.author}</Text>
@@ -163,7 +164,11 @@ export default function BookDetailsScreen() {
           {book.readUrl && (
             <AppButton
               label="📖 Read"
-              onPress={() => router.push(`/reader/${book.id}`)}
+              onPress={() =>
+                book.source === 'upload'
+                  ? Linking.openURL(book.readUrl!)
+                  : router.push(`/reader/${book.id}`)
+              }
               style={styles.ctaButton}
             />
           )}
@@ -190,7 +195,7 @@ export default function BookDetailsScreen() {
         </GlassPanel>
       )}
 
-      {book.downloadUrl && (
+      {book.downloadUrl && book.source !== 'upload' && (
         <AppButton
           label={downloading ? 'Downloading…' : '⬇ Download EPUB'}
           variant="secondary"
@@ -206,7 +211,7 @@ export default function BookDetailsScreen() {
       <GlassPanel style={styles.detailsCard}>
         <View style={styles.detailRow}>
           <View style={styles.detailItem}>
-            <Text style={[styles.detailValue, { color: colors.text }]}>{book.pages ?? 280}</Text>
+            <Text style={[styles.detailValue, { color: colors.text }]}>{book.pages ?? '—'}</Text>
             <Text style={[styles.detailLabel, { color: colors.mutedText }]}>Pages</Text>
           </View>
           <View style={[styles.detailDivider, { backgroundColor: colors.border }]} />
@@ -219,7 +224,7 @@ export default function BookDetailsScreen() {
           <View style={[styles.detailDivider, { backgroundColor: colors.border }]} />
           <View style={styles.detailItem}>
             <Text style={[styles.detailValue, { color: colors.text }]}>
-              {book.publishedYear ?? 2020}
+              {book.publishedYear ?? '—'}
             </Text>
             <Text style={[styles.detailLabel, { color: colors.mutedText }]}>Published</Text>
           </View>
@@ -317,25 +322,27 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   heroCard: {
-    padding: 20,
+    padding: 18,
     alignItems: 'center',
     marginBottom: 18,
   },
   coverArea: {
     width: '100%',
-    height: 260,
-    borderRadius: 28,
+    height: 300,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 18,
   },
   cover: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 250,
+    borderRadius: 8,
   },
   title: {
-    fontSize: 28,
+    fontSize: 27,
     fontWeight: '800',
+    letterSpacing: -0.5,
     textAlign: 'center',
     marginBottom: 6,
   },
