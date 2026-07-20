@@ -1,6 +1,6 @@
 import type { ImageSourcePropType } from 'react-native';
 
-export type BookSource = 'local' | 'gutendex' | 'openlibrary';
+export type BookSource = 'local' | 'gutendex' | 'openlibrary' | 'upload';
 
 export type Book = {
   id: string;
